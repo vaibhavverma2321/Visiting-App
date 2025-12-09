@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -29,6 +29,8 @@ class VisitingCard(Base):
 
     owner = relationship("User", back_populates="cards")
     phone_numbers = relationship("PhoneNumber", back_populates="card", cascade="all, delete")
+
+    description = Column(Text, nullable=True)
 
 class PhoneNumber(Base):
     __tablename__ = "phone_numbers"

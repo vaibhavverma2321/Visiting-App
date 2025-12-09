@@ -22,6 +22,7 @@ def add_card(
         company_name=card.company_name,
         email=card.email,
         address=card.address,
+        description=card.description
     )
 
     db.add(new_card)
@@ -49,7 +50,7 @@ def get_cards(
 ):
     cards = (
         db.query(models.VisitingCard)
-        .options(selectinload(models.VisitingCard.phone_numbers))  # ✅ THIS LINE
+        .options(selectinload(models.VisitingCard.phone_numbers))
         .filter(models.VisitingCard.user_id == user.id)
         .all()
     )
@@ -58,7 +59,7 @@ def get_cards(
 
 from fastapi import HTTPException
 
-# 📌 Get Single Card
+# Get Single Card
 @router.get("/{card_id}")
 def get_card(
     card_id: int,
@@ -81,7 +82,7 @@ def get_card(
     return card
 
 
-# ✏ Update Card
+# Update Card
 @router.put("/{card_id}")
 def update_card(
     card_id: int,
@@ -103,6 +104,7 @@ def update_card(
     card.company_name = updated_data.company_name
     card.email = updated_data.email
     card.address = updated_data.address
+    card.description = updated_data.description
 
     # Clear old phone numbers and re-add new
     db.query(models.PhoneNumber).filter(
@@ -116,7 +118,7 @@ def update_card(
     return {"message": "Card updated successfully"}
 
 
-# ❌ Delete Card
+# Delete Card
 @router.delete("/{card_id}")
 def delete_card(
     card_id: int,
@@ -163,6 +165,7 @@ def download_card_xml(
     ET.SubElement(card_xml, "CompanyName").text = card.company_name
     ET.SubElement(card_xml, "Email").text = card.email
     ET.SubElement(card_xml, "Address").text = card.address
+    ET.SubElement(card_xml, "Description").text = card.description
 
     phones_element = ET.SubElement(card_xml, "PhoneNumbers")
     for number in card.phone_numbers:

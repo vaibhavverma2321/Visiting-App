@@ -3,9 +3,16 @@ from jose import jwt, JWTError
 from fastapi.security import OAuth2PasswordBearer
 from database import SessionLocal
 import models
+import os
+from dotenv import load_dotenv
 
-SECRET_KEY = "fca09dac40f8c4a45e0f881f86aa20e516658eb6cdb9c9f7c816ec3c50429bd5"
-ALGORITHM = "HS256"
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY missing in .env")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/login")
 

@@ -20,3 +20,4 @@ class VisitingCardCreate(BaseModel):
 
     email: Optional[EmailStr] = None
     address: Optional[str] = None
+    description: Optional[str] = None
